@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "zone": "Locker room",
+    "type": "Furniture",
+    "description": "Broken handle on locker #15",
+    "status": "open"
+  },
+  {
+    "id": 2,
+    "zone": "Gym",
+    "type": "Equipment",
+    "description": "Treadmill #3 not working",
+    "status": "in progress"
+  }
+]

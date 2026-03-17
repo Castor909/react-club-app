@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Yoga",
+    "time": "13:00",
+    "level": "Beginners",
+    "status": "available"
+  },
+  {
+    "id": 2,
+    "name": "Yoga",
+    "time": "19:00",
+    "level": "Intermediate",
+    "status": "full"
+  }
+]
