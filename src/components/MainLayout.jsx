@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import classesData from '../data/classes.json';
 import validDnis from '../data/validDnis.json';
+import issuesData from '../data/issues.json';
 import ClassList from './ClassList';
 import DniForm from './DniForm';
 import Confirmation from './Confirmation';
@@ -13,6 +14,7 @@ export default function MainLayout() {
   const [bookingClass, setBookingClass] = useState(null);
   const [bookingError, setBookingError] = useState('');
   const [confirmationMsg, setConfirmationMsg] = useState('');
+  const [issues, setIssues] = useState(issuesData);
 
   const handleInitiateBooking = (classItem) => {
     setBookingError('');
@@ -41,6 +43,13 @@ export default function MainLayout() {
     setBookingError('');
   };
 
+  const handleReportSubmit = ({ zone, type, description }) => {
+    const nextId = issues.length ? Math.max(...issues.map((i) => i.id)) + 1 : 1;
+    const newIssue = { id: nextId, zone, type, description, status: 'open' };
+    setIssues((prev) => [newIssue, ...prev]);
+    setConfirmationMsg(`Report submitted! Ticket #${newIssue.id} created.`);
+  };
+
   return (
     <main>
       <h2>MainLayout</h2>
@@ -63,7 +72,7 @@ export default function MainLayout() {
         )}
 
         <ReportIssueButton />
-        <IssueForm />
+        <IssueForm onSubmit={handleReportSubmit} />
       </section>
 
       <Confirmation message={confirmationMsg} onBack={() => setConfirmationMsg('')} />
