@@ -1,4 +1,4 @@
-export default function ClassCard({ classItem }) {
+export default function ClassCard({ classItem, onBook = () => {} }) {
   if (!classItem) return null;
 
   const { name, time, level, status } = classItem;
@@ -10,8 +10,12 @@ export default function ClassCard({ classItem }) {
         <div style={{ fontSize: 12, color: '#666' }}>{level}</div>
       </div>
       <div>
-        {status === 'available' ? (
-          <button>Book</button>
+        {status === 'available' || status === 'booked' ? (
+          <>
+            <button onClick={() => onBook(classItem)} disabled={status === 'booked'}>
+              {status === 'booked' ? 'Booked' : 'Book'}
+            </button>
+          </>
         ) : (
           <button disabled>Full</button>
         )}
