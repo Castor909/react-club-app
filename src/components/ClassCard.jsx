@@ -1,3 +1,21 @@
-export default function ClassCard() {
-  return <div>ClassCard</div>;
+export default function ClassCard({ classItem }) {
+  if (!classItem) return null;
+
+  const { name, time, level, status } = classItem;
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ flex: 1 }}>
+        <strong>{name}</strong> <span>— {time}</span>
+        <div style={{ fontSize: 12, color: '#666' }}>{level}</div>
+      </div>
+      <div>
+        {status === 'available' ? (
+          <button>Book</button>
+        ) : (
+          <button disabled>Full</button>
+        )}
+      </div>
+    </div>
+  );
 }
