@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import classesData from '../data/classes.json';
+import validDnis from '../data/validDnis.json';
 import ClassList from './ClassList';
 import DniForm from './DniForm';
 import Confirmation from './Confirmation';
@@ -20,12 +21,17 @@ export default function MainLayout() {
   };
 
   const handleBookingSubmit = (dni) => {
-    // Simulate DNI check: require valid format already validated by DniForm
     if (!bookingClass) return;
 
-    // Simulate successful booking: mark class as booked
-    setClasses((prev) => prev.map((c) => (c.id === bookingClass.id ? { ...c, status: 'booked' } : c)));
+    const entered = (dni || '').trim().toUpperCase();
+    const found = validDnis.find((v) => v.dni.toUpperCase() === entered);
+    if (!found || !found.active) {
+      setBookingError('Error: DNI not found or inactive');
+      return;
+    }
 
+    // Successful booking: mark class as booked
+    setClasses((prev) => prev.map((c) => (c.id === bookingClass.id ? { ...c, status: 'booked' } : c)));
     setConfirmationMsg(`You have successfully booked: ${bookingClass.name}, ${bookingClass.time}`);
     setBookingClass(null);
   };

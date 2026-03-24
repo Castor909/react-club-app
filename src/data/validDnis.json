@@ -1,0 +1,5 @@
+[
+  { "dni": "A1234567B", "active": true },
+  { "dni": "B7654321C", "active": true },
+  { "dni": "C1111111D", "active": false }
+]
