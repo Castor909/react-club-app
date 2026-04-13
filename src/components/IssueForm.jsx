@@ -19,12 +19,12 @@ export default function IssueForm({ onSubmit = () => {}, initialZone = '', initi
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ border: '1px solid #ddd', padding: 12, borderRadius: 6, marginTop: 12 }}>
+    <form onSubmit={handleSubmit} className="card" style={{ marginTop: 12 }}>
       <h4>Report an issue</h4>
       <div style={{ marginBottom: 8 }}>
         <label>
           Zone
-          <select value={zone} onChange={(e) => setZone(e.target.value)} style={{ display: 'block', width: '100%', padding: 8 }}>
+          <select value={zone} onChange={(e) => setZone(e.target.value)} className="form-input">
             <option value="">-- select zone --</option>
             <option value="Locker room">Locker room</option>
             <option value="Gym">Gym</option>
@@ -36,7 +36,7 @@ export default function IssueForm({ onSubmit = () => {}, initialZone = '', initi
       <div style={{ marginBottom: 8 }}>
         <label>
           Issue type
-          <select value={type} onChange={(e) => setType(e.target.value)} style={{ display: 'block', width: '100%', padding: 8 }}>
+          <select value={type} onChange={(e) => setType(e.target.value)} className="form-input">
             <option value="">-- select type --</option>
             <option value="Equipment">Equipment</option>
             <option value="Facility">Facility</option>
@@ -48,13 +48,13 @@ export default function IssueForm({ onSubmit = () => {}, initialZone = '', initi
       <div style={{ marginBottom: 8 }}>
         <label>
           Description
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} style={{ display: 'block', width: '100%', padding: 8 }} rows={4} />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="form-textarea" rows={4} />
         </label>
       </div>
 
-      <div style={{ color: 'red', minHeight: 18 }}>{error}</div>
+      <div>{error ? <div className="error">{error}</div> : null}</div>
       <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-        <button type="submit">Submit report</button>
+        <button type="submit" className="btn btn--primary">Submit report</button>
       </div>
     </form>
   );
