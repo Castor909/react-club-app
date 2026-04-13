@@ -6,6 +6,7 @@ import ClassList from './ClassList';
 import DniForm from './DniForm';
 import Confirmation from './Confirmation';
 import ErrorMessage from './ErrorMessage';
+import Modal from './Modal';
 import ReportIssueButton from './ReportIssueButton';
 import IssueForm from './IssueForm';
 
@@ -51,7 +52,7 @@ export default function MainLayout() {
   };
 
   return (
-    <main>
+    <main className="container">
       <h2>MainLayout</h2>
       <section>
         <h3>Available Classes</h3>
@@ -60,22 +61,29 @@ export default function MainLayout() {
 
       <section>
         <h3>Report / Booking</h3>
-        {bookingClass ? (
+        <div className="muted">Select a class and tap Book to begin the booking flow.</div>
+
+        <ReportIssueButton />
+        <IssueForm onSubmit={handleReportSubmit} />
+      </section>
+
+      {bookingClass && (
+        <Modal onClose={handleBookingBack}>
           <DniForm
             title={`Enter DNI to book: ${bookingClass.name}`}
             onSubmit={handleBookingSubmit}
             onBack={handleBookingBack}
             error={bookingError}
           />
-        ) : (
-          <div>Select a class and click Book to begin</div>
-        )}
+        </Modal>
+      )}
 
-        <ReportIssueButton />
-        <IssueForm onSubmit={handleReportSubmit} />
-      </section>
+      {confirmationMsg && (
+        <Modal onClose={() => setConfirmationMsg('')}>
+          <Confirmation message={confirmationMsg} onBack={() => setConfirmationMsg('')} />
+        </Modal>
+      )}
 
-      <Confirmation message={confirmationMsg} onBack={() => setConfirmationMsg('')} />
       <ErrorMessage message={bookingError} />
     </main>
   );
