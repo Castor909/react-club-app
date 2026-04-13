@@ -1,12 +1,12 @@
 :root{
-  --color-primary: #1e88e5;
-  --color-secondary: #ff7043;
-  --color-bg: #ffffff;
-  --color-surface: #f7f9fc;
-  --color-text: #0f1724;
-  --color-muted: #586069;
-  --color-success: #2e7d32;
-  --color-error: #c62828;
+  --color-primary: #0F766E; /* brand teal */
+  --color-cta: #FF6B4A; /* warm coral for CTAs */
+  --color-bg: #0B1220; /* deep charcoal */
+  --color-surface: #0F1724; /* dark slate */
+  --color-text: #E6EEF8; /* light text */
+  --color-muted: #97A3B3; /* muted secondary */
+  --color-success: #2ECC71;
+  --color-error: #FF4D4F;
   --font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --fs-base: 16px;
   --radius: 8px;
@@ -26,19 +26,19 @@ body{
   background:var(--color-surface);
   border-radius:var(--radius);
   padding:calc(var(--space)*1.5);
-  border:1px solid rgba(15,23,36,0.04);
+  border:1px solid rgba(255,255,255,0.03);
 }
 
 .btn{padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
-.btn--primary{background:var(--color-primary);color:#fff}
+.btn--primary{background:var(--color-cta);color:#fff}
 .btn[disabled]{opacity:0.6;cursor:not-allowed}
 
 .muted{color:var(--color-muted)}
 
-.form-input{padding:8px;border-radius:6px;border:1px solid #e6eef8;width:100%}
-.form-textarea{padding:8px;border-radius:6px;border:1px solid #e6eef8;width:100%;min-height:80px}
+.form-input{padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);width:100%;background:transparent;color:var(--color-text)}
+.form-textarea{padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);width:100%;min-height:80px;background:transparent;color:var(--color-text)}
 
-.error{color:var(--color-error);background: #fff6f6;padding:8px;border-radius:6px;border:1px solid rgba(198,40,40,0.1)}
-.confirm{color:var(--color-success);background:#f2fbf2;padding:12px;border-radius:6px;border:1px solid rgba(46,125,50,0.08)}
+.error{color:var(--color-error);background: rgba(255,77,79,0.06);padding:8px;border-radius:6px;border:1px solid rgba(255,77,79,0.12)}
+.confirm{color:var(--color-success);background: rgba(46,204,113,0.06);padding:12px;border-radius:6px;border:1px solid rgba(46,204,113,0.08)}
 
 .container{max-width:960px;margin:20px auto;padding:0 16px}
