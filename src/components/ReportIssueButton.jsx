@@ -1,3 +1,7 @@
-export default function ReportIssueButton() {
-  return <div>ReportIssueButton</div>;
+export default function ReportIssueButton({onClick}) {
+  return (
+    <button className="btn btn-outline" onClick={onClick}>
+      Report an Issue
+    </button>
+  );
 }

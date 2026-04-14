@@ -15,6 +15,9 @@ export default function MainLayout() {
   const [bookingClass, setBookingClass] = useState(null);
   const [bookingError, setBookingError] = useState('');
   const [confirmationMsg, setConfirmationMsg] = useState('');
+  const [reportStep, setReportStep] = useState('idle'); // idle | dni | form
+  const [reportDni, setReportDni] = useState('');
+  const [reportError, setReportError] = useState('');
   const [issues, setIssues] = useState(issuesData);
 
   const handleInitiateBooking = (classItem) => {
@@ -44,11 +47,37 @@ export default function MainLayout() {
     setBookingError('');
   };
 
+  const handleStartReport = () => {
+    setReportError('');
+    setConfirmationMsg('');
+    setReportStep('dni');
+  };
+
+  const handleReportDniSubmit = (dni) => {
+    const entered = (dni || '').trim().toUpperCase();
+    const found = validDnis.find((v) => v.dni.toUpperCase() === entered);
+    if (!found || !found.active) {
+      setReportError('Error: DNI not found or inactive');
+      return;
+    }
+    setReportDni(entered);
+    setReportError('');
+    setReportStep('form');
+  };
+
+  const handleReportDniBack = () => {
+    setReportDni('');
+    setReportError('');
+    setReportStep('idle');
+  };
+
   const handleReportSubmit = ({ zone, type, description }) => {
     const nextId = issues.length ? Math.max(...issues.map((i) => i.id)) + 1 : 1;
     const newIssue = { id: nextId, zone, type, description, status: 'open' };
     setIssues((prev) => [newIssue, ...prev]);
     setConfirmationMsg(`Report submitted! Ticket #${newIssue.id} created.`);
+    // close modal flow
+    setReportStep('idle');
   };
 
   return (
@@ -63,12 +92,11 @@ export default function MainLayout() {
         <h3>Report / Booking</h3>
         <div className="muted">Select a class and tap Book to begin the booking flow.</div>
 
-        <ReportIssueButton />
-        <IssueForm onSubmit={handleReportSubmit} />
+        <ReportIssueButton onClick={handleStartReport} />
       </section>
 
       {bookingClass && (
-        <Modal onClose={handleBookingBack}>
+        <Modal open={true} onClose={handleBookingBack} title={`Book: ${bookingClass.name}`}>
           <DniForm
             title={`Enter DNI to book: ${bookingClass.name}`}
             onSubmit={handleBookingSubmit}
@@ -78,13 +106,30 @@ export default function MainLayout() {
         </Modal>
       )}
 
+      {reportStep === 'dni' && (
+        <Modal open={true} onClose={handleReportDniBack} title="Verify DNI">
+          <DniForm
+            title={`Enter your DNI to report an issue`}
+            onSubmit={handleReportDniSubmit}
+            onBack={handleReportDniBack}
+            error={reportError}
+          />
+        </Modal>
+      )}
+
+      {reportStep === 'form' && (
+        <Modal open={true} onClose={() => setReportStep('idle')} title="Report an Issue">
+          <IssueForm onSubmit={handleReportSubmit} />
+        </Modal>
+      )}
+
       {confirmationMsg && (
-        <Modal onClose={() => setConfirmationMsg('')}>
+        <Modal open={true} onClose={() => setConfirmationMsg('')} title="Success">
           <Confirmation message={confirmationMsg} onBack={() => setConfirmationMsg('')} />
         </Modal>
       )}
 
-      <ErrorMessage message={bookingError} />
+      <ErrorMessage message={bookingError || reportError} />
     </main>
   );
 }
