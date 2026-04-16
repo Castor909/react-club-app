@@ -17,6 +17,9 @@ export default function useFetch(path) {
 
   useEffect(() => {
     const controller = new AbortController();
+    // Guard against race conditions:
+    // if the user navigates quickly, an older request may resolve after a newer one.
+    // We only update state while this effect instance is still the active one.
     let isActive = true;
 
     async function load() {
@@ -59,6 +62,8 @@ export default function useFetch(path) {
     };
   }, [url, requestTick]);
 
+  // Consumer-friendly retry API: components can call refetch() without coupling
+  // to URL construction or effect dependencies.
   const refetch = () => setRequestTick((tick) => tick + 1);
 
   return { data, loading, error, refetch };

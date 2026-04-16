@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
 function normalizeList(payload) {
+  // Accept both direct arrays and paginated containers.
+  // This avoids rewriting rendering logic if API response wrapping changes.
   if (Array.isArray(payload)) return payload;
   if (Array.isArray(payload?.items)) return payload.items;
   if (Array.isArray(payload?.results)) return payload.results;
@@ -23,6 +25,7 @@ export default function VenueList({ venuesData }) {
       {venues.map((venue) => {
         const venueId = venue?.public_id;
         return (
+          // Keep key and route id resilient to minor schema differences.
           <article className="card coach-card" key={venueId || venue?.id || venue?.name}>
             <div>
               <h3 className="item-title">{getVenueName(venue)}</h3>

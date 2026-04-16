@@ -6,6 +6,8 @@ export default function VenueDetailPage() {
   const { publicId } = useParams();
   const { data, loading, error, refetch } = useFetch(`/inventory/venues/${publicId}`);
 
+  // Normalize backend fields into stable labels before rendering.
+  // This prevents repeated inline fallback chains in JSX and keeps the UI readable.
   const detailItems = data
     ? [
         ['Location', data.location || data.city || 'N/A'],

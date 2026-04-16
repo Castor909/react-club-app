@@ -1,47 +1,48 @@
 # React Club App - Phase 2
 
-React application built with Vite for the Athletics Sports Club assignment. This phase keeps the original booking and issue-report flows and adds read-only API views with routing, loading states, and error handling.
+This is my Phase 2 submission for the React application assignment.
 
-## Implemented user stories
+The app keeps the two stories from Phase 1 and adds two new API-based stories:
 
-1. Book a class (legacy phase 1 flow)
-2. Report an issue (legacy phase 1 flow)
-3. Browse coaches (API list and detail)
-4. View venue information (API list and detail)
+1. Browse coaches (list + detail)
+2. View venues (list + detail)
 
-## Stack
+## Tech
 
-- Vite
-- React
+- React + Vite
 - react-router-dom
-- Plain CSS
+- CSS
 
-## API requirements
+## What is implemented
 
-Run the Sportsclub API backend locally (Docker Compose) and set the frontend base URL.
+- Routing between pages
+- API integration with fetch (GET only)
+- Loading states
+- Error states with retry
+- At least 3 new functional components for the new stories
 
-### Expected endpoints
+## API endpoints used
 
-- `/api/v1/people/coaches`
-- `/api/v1/people/coaches/{public_id}`
-- `/api/v1/inventory/venues`
-- `/api/v1/inventory/venues/{public_id}`
+- /api/v1/people/coaches
+- /api/v1/people/coaches/{public_id}
+- /api/v1/inventory/venues
+- /api/v1/inventory/venues/{public_id}
 
-## Frontend setup
+## Run
 
-1. Install dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Set API base URL (optional if using default `http://localhost:8000/api/v1`):
+Set API URL in environment file (example):
 
 ```bash
-echo "VITE_API_BASE_URL=http://localhost:8000/api/v1" > .env.local
+VITE_API_BASE_URL=http://localhost:8001/api/v1
 ```
 
-3. Start dev server:
+Start app:
 
 ```bash
 npm run dev
@@ -49,22 +50,40 @@ npm run dev
 
 ## Scripts
 
-- `npm run dev`
-- `npm run build`
-- `npm run lint`
+- npm run dev
+- npm run lint
+- npm run build
 
 ## Routes
 
-- `/` -> MainLayout (phase 1 legacy)
-- `/coaches` -> Coaches list
-- `/coaches/:publicId` -> Coach detail
-- `/venues` -> Venues list
-- `/venues/:publicId` -> Venue detail
+- /
+- /coaches
+- /coaches/:publicId
+- /venues
+- /venues/:publicId
 
-## Quick verification checklist
+## How to verify (for grading)
 
-1. Open `/coaches` and `/venues` from navigation.
-2. Open one item from each list to reach detail routes.
-3. Confirm loading state appears while waiting for API.
-4. Stop backend and confirm error state + retry button appear.
-5. Run `npm run lint` and `npm run build`.
+1. Open /coaches and /venues from the top navigation.
+2. Open one item in each list and confirm detail routes work.
+3. Confirm loading text appears while waiting for API data.
+4. Stop the API and confirm error + retry behavior.
+5. Run lint/build checks before submission.
+
+## Rubric coverage
+
+- API integration (fetch): list + detail GET endpoints for coaches and venues.
+- Asynchronous UI states: loading and error with retry.
+- Routing: multiple views with list and detail navigation.
+- Component expansion: new reusable components added for the new stories.
+
+## Scope note
+
+- Stories 3 and 4 are fully API-based in Phase 2.
+- Stories 1 and 2 are kept from Phase 1 flow.
+- Write operations are explicitly deferred to Phase 3.
+
+## Notes
+
+- Phase 2 is focused on read operations, so new API stories are GET-only.
+- Write operations (create/update/delete) are planned for the next phase.

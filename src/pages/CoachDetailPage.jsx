@@ -13,6 +13,8 @@ export default function CoachDetailPage() {
   const { data, loading, error, refetch } = useFetch(`/people/coaches/${publicId}`);
   const displayName = getCoachName(data);
 
+  // Build a label/value structure first, then render it in one generic map.
+  // This keeps JSX compact and makes field changes (add/remove/rename) trivial.
   const detailItems = data
     ? [
         ['Email', data.email || 'N/A'],

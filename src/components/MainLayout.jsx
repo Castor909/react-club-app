@@ -11,6 +11,9 @@ import ReportIssueButton from './ReportIssueButton';
 import IssueForm from './IssueForm';
 
 export default function MainLayout() {
+  // This screen is the preserved Phase 1 flow.
+  // It intentionally runs on local JSON so booking/reporting can be demonstrated
+  // without backend write endpoints (writes are planned for the next phase).
   const [classes, setClasses] = useState(classesData);
   const [bookingClass, setBookingClass] = useState(null);
   const [bookingError, setBookingError] = useState('');
@@ -36,7 +39,8 @@ export default function MainLayout() {
       return;
     }
 
-    // Successful booking: mark class as booked
+    // Simulate a successful booking by mutating local state only.
+    // We do not call POST here because this part is still in mock mode.
     setClasses((prev) => prev.map((c) => (c.id === bookingClass.id ? { ...c, status: 'booked' } : c)));
     setConfirmationMsg(`You have successfully booked: ${bookingClass.name}, ${bookingClass.time}`);
     setBookingClass(null);
@@ -72,6 +76,8 @@ export default function MainLayout() {
   };
 
   const handleReportSubmit = ({ zone, type, description }) => {
+    // Simulate issue creation locally to keep the UX complete for now.
+    // Real create/update API operations are intentionally postponed.
     const nextId = issues.length ? Math.max(...issues.map((i) => i.id)) + 1 : 1;
     const newIssue = { id: nextId, zone, type, description, status: 'open' };
     setIssues((prev) => [newIssue, ...prev]);
