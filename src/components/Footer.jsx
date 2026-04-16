@@ -1,3 +1,7 @@
 export default function Footer() {
-  return <div>Footer</div>;
+  return (
+    <footer className="app-footer">
+      <div className="container muted">React Club App - Phase 2</div>
+    </footer>
+  );
 }

@@ -16,7 +16,7 @@ export default function MainLayout() {
   const [bookingError, setBookingError] = useState('');
   const [confirmationMsg, setConfirmationMsg] = useState('');
   const [reportStep, setReportStep] = useState('idle'); // idle | dni | form
-  const [reportDni, setReportDni] = useState('');
+  const [, setReportDni] = useState('');
   const [reportError, setReportError] = useState('');
   const [issues, setIssues] = useState(issuesData);
 
