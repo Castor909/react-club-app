@@ -9,6 +9,15 @@ import ErrorMessage from './ErrorMessage';
 import Modal from './Modal';
 import ReportIssueButton from './ReportIssueButton';
 import IssueForm from './IssueForm';
+import { requestApi } from '../hooks/useFetch';
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const BOOKING_MUTATION_PATH = import.meta.env.VITE_PHASE3_BOOKING_PATH || '/classes/bookings';
+const ISSUE_MUTATION_PATH = import.meta.env.VITE_PHASE3_ISSUE_PATH || '/issues';
+const USE_MOCK_MUTATIONS = import.meta.env.VITE_PHASE3_USE_MOCK_MUTATIONS !== 'false';
 
 export default function MainLayout() {
   // This screen is the preserved Phase 1 flow.
@@ -17,10 +26,12 @@ export default function MainLayout() {
   const [classes, setClasses] = useState(classesData);
   const [bookingClass, setBookingClass] = useState(null);
   const [bookingError, setBookingError] = useState('');
+  const [bookingSubmitting, setBookingSubmitting] = useState(false);
   const [confirmationMsg, setConfirmationMsg] = useState('');
   const [reportStep, setReportStep] = useState('idle'); // idle | dni | form
   const [, setReportDni] = useState('');
   const [reportError, setReportError] = useState('');
+  const [reportSubmitting, setReportSubmitting] = useState(false);
   const [issues, setIssues] = useState(issuesData);
 
   const handleInitiateBooking = (classItem) => {
@@ -29,8 +40,15 @@ export default function MainLayout() {
     setBookingClass(classItem);
   };
 
-  const handleBookingSubmit = (dni) => {
+  const completeBookingLocally = (classItem) => {
+    setClasses((prev) => prev.map((c) => (c.id === classItem.id ? { ...c, status: 'booked' } : c)));
+    setConfirmationMsg(`You have successfully booked: ${classItem.name}, ${classItem.time}`);
+    setBookingClass(null);
+  };
+
+  const handleBookingSubmit = async (dni) => {
     if (!bookingClass) return;
+    if (bookingSubmitting) return;
 
     const entered = (dni || '').trim().toUpperCase();
     const found = validDnis.find((v) => v.dni.toUpperCase() === entered);
@@ -39,11 +57,40 @@ export default function MainLayout() {
       return;
     }
 
-    // Simulate a successful booking by mutating local state only.
-    // We do not call POST here because this part is still in mock mode.
-    setClasses((prev) => prev.map((c) => (c.id === bookingClass.id ? { ...c, status: 'booked' } : c)));
-    setConfirmationMsg(`You have successfully booked: ${bookingClass.name}, ${bookingClass.time}`);
-    setBookingClass(null);
+    setBookingSubmitting(true);
+    setBookingError('');
+
+    try {
+      const payload = {
+        class_id: bookingClass.id,
+        dni: entered,
+      };
+
+      let apiResponse = null;
+
+      try {
+        apiResponse = await requestApi(BOOKING_MUTATION_PATH, {
+          method: 'POST',
+          body: payload,
+        });
+      } catch (apiError) {
+        if (!USE_MOCK_MUTATIONS) {
+          throw apiError;
+        }
+      }
+
+      if (apiResponse && typeof apiResponse === 'object' && apiResponse.class) {
+        setClasses((prev) => prev.map((c) => (c.id === apiResponse.class.id ? { ...c, ...apiResponse.class } : c)));
+        setConfirmationMsg(apiResponse.message || `You have successfully booked: ${bookingClass.name}, ${bookingClass.time}`);
+        setBookingClass(null);
+        return;
+      }
+
+      await wait(350);
+      completeBookingLocally(bookingClass);
+    } finally {
+      setBookingSubmitting(false);
+    }
   };
 
   const handleBookingBack = () => {
@@ -75,15 +122,49 @@ export default function MainLayout() {
     setReportStep('idle');
   };
 
-  const handleReportSubmit = ({ zone, type, description }) => {
-    // Simulate issue creation locally to keep the UX complete for now.
-    // Real create/update API operations are intentionally postponed.
-    const nextId = issues.length ? Math.max(...issues.map((i) => i.id)) + 1 : 1;
-    const newIssue = { id: nextId, zone, type, description, status: 'open' };
-    setIssues((prev) => [newIssue, ...prev]);
-    setConfirmationMsg(`Report submitted! Ticket #${newIssue.id} created.`);
-    // close modal flow
-    setReportStep('idle');
+  const handleReportSubmit = async ({ zone, type, description }) => {
+    if (reportSubmitting) return;
+
+    setReportSubmitting(true);
+
+    try {
+      const payload = {
+        zone,
+        type,
+        description,
+      };
+
+      let apiResponse = null;
+
+      try {
+        apiResponse = await requestApi(ISSUE_MUTATION_PATH, {
+          method: 'POST',
+          body: payload,
+        });
+      } catch (apiError) {
+        if (!USE_MOCK_MUTATIONS) {
+          throw apiError;
+        }
+      }
+
+      if (apiResponse && typeof apiResponse === 'object' && apiResponse.issue) {
+        setIssues((prev) => [apiResponse.issue, ...prev]);
+        setConfirmationMsg(apiResponse.message || `Report submitted! Ticket #${apiResponse.issue.id} created.`);
+        setReportStep('idle');
+        return;
+      }
+
+      await wait(350);
+
+      const nextId = issues.length ? Math.max(...issues.map((i) => i.id)) + 1 : 1;
+      const newIssue = { id: nextId, zone, type, description, status: 'open' };
+      setIssues((prev) => [newIssue, ...prev]);
+      setConfirmationMsg(`Report submitted! Ticket #${newIssue.id} created.`);
+      // close modal flow
+      setReportStep('idle');
+    } finally {
+      setReportSubmitting(false);
+    }
   };
 
   return (
@@ -108,6 +189,8 @@ export default function MainLayout() {
             onSubmit={handleBookingSubmit}
             onBack={handleBookingBack}
             error={bookingError}
+            isSubmitting={bookingSubmitting}
+            submitLabel={bookingSubmitting ? 'Booking...' : 'Confirm booking'}
           />
         </Modal>
       )}
@@ -125,7 +208,11 @@ export default function MainLayout() {
 
       {reportStep === 'form' && (
         <Modal open={true} onClose={() => setReportStep('idle')} title="Report an Issue">
-          <IssueForm onSubmit={handleReportSubmit} />
+          <IssueForm
+            onSubmit={handleReportSubmit}
+            isSubmitting={reportSubmitting}
+            submitLabel={reportSubmitting ? 'Submitting...' : 'Submit report'}
+          />
         </Modal>
       )}
 

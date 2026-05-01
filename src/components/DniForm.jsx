@@ -1,6 +1,13 @@
 import { useState } from 'react';
 
-export default function DniForm({ title = 'Enter DNI', onSubmit = () => {}, onBack = () => {}, error = '' }) {
+export default function DniForm({
+  title = 'Enter DNI',
+  onSubmit = () => {},
+  onBack = () => {},
+  error = '',
+  isSubmitting = false,
+  submitLabel = 'Continue',
+}) {
   const [dni, setDni] = useState('');
   const [localError, setLocalError] = useState('');
 
@@ -28,11 +35,14 @@ export default function DniForm({ title = 'Enter DNI', onSubmit = () => {}, onBa
           value={dni}
           onChange={(e) => setDni(e.target.value)}
           placeholder="A1234567B"
+          disabled={isSubmitting}
         />
       </div>
       <div style={{ minHeight: 18 }}>{localError || error ? <div className="error">{localError || error}</div> : null}</div>
       <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-        <button type="submit" className="btn btn--primary">Continue</button>
+        <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
+          {submitLabel}
+        </button>
         <button type="button" className="btn" onClick={onBack}>Back</button>
       </div>
     </form>
