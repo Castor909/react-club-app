@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { buildApiUrl } from '../config';
 
 const DEBUG_FETCH_DELAY_MS = Number(import.meta.env.VITE_DEBUG_FETCH_DELAY_MS || 0);
@@ -74,7 +74,6 @@ export default function useFetch(path) {
   const [error, setError] = useState('');
   const [requestTick, setRequestTick] = useState(0);
 
-  const url = useMemo(() => buildApiUrl(path), [path]);
   const request = useCallback((options = {}) => requestApi(path, options), [path]);
 
   useEffect(() => {
@@ -113,7 +112,7 @@ export default function useFetch(path) {
       isActive = false;
       controller.abort();
     };
-  }, [url, requestTick]);
+  }, [path, requestTick]);
 
   // Consumer-friendly retry API: components can call refetch() without coupling
   // to URL construction or effect dependencies.
