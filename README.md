@@ -79,6 +79,23 @@ npm run dev
 - npm run lint
 - npm run build
 
+## Docker
+
+Build and run the frontend container from the `docker/` folder:
+
+```bash
+docker compose -f docker/docker-compose.yml build
+docker compose -f docker/docker-compose.yml up
+```
+
+Open the app at `http://localhost:8080`.
+
+The container uses a multi-stage build:
+
+1. A Node.js build stage installs dependencies and runs `npm run build`.
+2. An nginx:alpine stage serves the generated static files.
+3. The nginx config falls back to `index.html` so React Router routes keep working.
+
 ## Verification
 
 1. Open `/coaches` and `/venues` from the top navigation.
