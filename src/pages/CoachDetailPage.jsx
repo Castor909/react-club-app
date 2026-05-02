@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/ErrorMessage';
 import useFetch, { requestApi } from '../hooks/useFetch';
 import CoachEditForm from '../components/CoachEditForm';
@@ -16,6 +16,7 @@ export default function CoachDetailPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editError, setEditError] = useState('');
   const [editSubmitting, setEditSubmitting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const displayName = getCoachName(data);
 
   const handleEditSubmit = async (updates) => {
@@ -36,6 +37,24 @@ export default function CoachDetailPage() {
       setEditError(err.message || 'Failed to update coach profile');
     } finally {
       setEditSubmitting(false);
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const handleDeleteCoach = async () => {
+    const ok = window.confirm('Delete this coach? This action cannot be undone.');
+    if (!ok) return;
+    setDeleting(true);
+    setEditError('');
+
+    try {
+      await requestApi(`/people/coaches/${publicId}`, { method: 'DELETE' });
+      navigate('/coaches');
+    } catch (err) {
+      setEditError(err.message || 'Failed to delete coach');
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -74,13 +93,24 @@ export default function CoachDetailPage() {
             <article className="card detail-card">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <h2 style={{ margin: 0 }}>{displayName}</h2>
-                <button
-                  className="btn btn--primary"
-                  onClick={() => setIsEditing(true)}
-                  style={{ fontSize: 14 }}
-                >
-                  Edit Profile
-                </button>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    className="btn btn--primary"
+                    onClick={() => setIsEditing(true)}
+                    style={{ fontSize: 14 }}
+                    disabled={deleting}
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    className="btn btn--danger"
+                    onClick={handleDeleteCoach}
+                    disabled={deleting}
+                    style={{ fontSize: 14 }}
+                  >
+                    {deleting ? 'Deleting...' : 'Delete'}
+                  </button>
+                </div>
               </div>
               {detailItems.length > 0 ? (
                 detailItems.map(([label, value]) => (
