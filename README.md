@@ -2,14 +2,16 @@
 
 This is my Phase 3 submission for the React application assignment.
 
-The app keeps the two stories from Phase 1 and adds the Phase 2 read-only API stories, then extends the home flow with write-oriented UX for Phase 3:
+The app implements all six user stories with complete CRUD workflows:
 
-1. Browse coaches (list + detail)
-2. View venues (list + detail)
-3. Book a class with controlled inputs, loading state, and success feedback
-4. Report an issue with controlled inputs, loading state, and success feedback
+1. **Book a class** (POST) – Browse classes, verify DNI, book with confirmation
+2. **Report an issue** (POST) – Staff report facility issues with form validation
+3. **Browse coaches** (GET) – View list and detail pages with error/retry handling
+4. **Browse venues** (GET) – View list and detail pages with error/retry handling
+5. **Update a coach profile** (PATCH) – Inline edit form on detail page with validation
+6. **Delete an outdated venue note** (DELETE) – Note management with confirmation dialog
 
-The home write flows attempt POST requests through configurable endpoints and fall back to local mock behavior if the backend mutation contract is not available yet.
+All write operations include loading states, success/error feedback, and client-side validation.
 
 ## Tech
 
@@ -30,20 +32,27 @@ The home write flows attempt POST requests through configurable endpoints and fa
 
 ## API endpoints used
 
-- /api/v1/people/coaches
-- /api/v1/people/coaches/{public_id}
-- /api/v1/inventory/venues
-- /api/v1/inventory/venues/{public_id}
+- GET `/api/v1/people/coaches`
+- GET `/api/v1/people/coaches/{public_id}`
+- PATCH `/api/v1/people/coaches/{public_id}` – Update coach profile
+- GET `/api/v1/inventory/venues`
+- GET `/api/v1/inventory/venues/{public_id}`
+- DELETE `/api/v1/inventory/venues/{public_id}/notes/{note_id}` – Delete venue note
 
 ## Optional mutation endpoints
 
-The home flows can POST to configurable endpoints when the backend is ready:
+The home flows (book + issue) can POST to configurable endpoints when the backend is ready:
 
-- `VITE_PHASE3_BOOKING_PATH` (default: `/classes/bookings`)
-- `VITE_PHASE3_ISSUE_PATH` (default: `/issues`)
-- `VITE_PHASE3_USE_MOCK_MUTATIONS` (default: `true`)
+- `VITE_PHASE3_BOOKING_PATH` (default: `/classes/bookings`) – POST booking request
+- `VITE_PHASE3_ISSUE_PATH` (default: `/issues`) – POST issue report
+- `VITE_PHASE3_USE_MOCK_MUTATIONS` (default: `true`) – Fall back to local mock if backend unavailable
 
-If the mutation endpoints are unavailable, the app keeps the flows working locally so the UI can still be reviewed.
+## HTTP Verb Coverage
+
+- **GET**: Stories 3 (Browse coaches) and 4 (Browse venues)
+- **POST**: Stories 1 (Book class) and 2 (Report issue)
+- **PATCH**: Story 5 (Update coach profile)
+- **DELETE**: Story 6 (Delete venue note)
 
 ## Run
 

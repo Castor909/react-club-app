@@ -1,0 +1,29 @@
+[
+  {
+    "public_id": "venue-1",
+    "id": 1,
+    "name": "Main Gym",
+    "venue_type": "Gym",
+    "location": "Downtown",
+    "address": { "formatted_address": "123 Main St", "name": "Main Street Gym" },
+    "capacity": 50,
+    "indoor": true,
+    "notes": [
+      { "id": 1, "text": "Equipment maintenance scheduled for next week" },
+      { "id": 2, "text": "AC system needs repair" }
+    ]
+  },
+  {
+    "public_id": "venue-2",
+    "id": 2,
+    "name": "Pool Area",
+    "venue_type": "Pool",
+    "location": "Waterfront",
+    "address": { "formatted_address": "456 Water Ave", "name": "Waterfront Pool" },
+    "capacity": 100,
+    "indoor": false,
+    "notes": [
+      { "id": 3, "text": "Water chlorine levels checked yesterday" }
+    ]
+  }
+]

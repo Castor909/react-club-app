@@ -31,6 +31,8 @@ body{
 
 .btn{padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
 .btn--primary{background:var(--color-cta);color:#fff}
+.btn--outline{background:transparent;color:var(--color-text);border:1px solid rgba(255,255,255,0.2)}
+.btn--danger{background:#FF4D4F;color:#fff}
 .btn[disabled]{opacity:0.6;cursor:not-allowed}
 
 .muted{color:var(--color-muted)}
@@ -199,6 +201,8 @@ body{
 .modal-form label{display:block;color:var(--color-muted);font-size:13px;margin-bottom:6px}
 .modal-form h4{margin:0 0 12px 0;color:var(--color-text)}
 .full-width{width:100%}
+label{display:block}
+label .form-input, label .form-textarea{margin-top:4px}
 .btn--primary.full-width{display:block;width:100%;padding:12px;border-radius:10px}
 
 /* Confirmation modal */
