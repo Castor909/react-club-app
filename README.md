@@ -9,7 +9,7 @@ The app implements all six user stories with complete CRUD workflows:
 3. **Browse coaches** (GET) – View list and detail pages with error/retry handling
 4. **Browse venues** (GET) – View list and detail pages with error/retry handling
 5. **Update a coach profile** (PATCH) – Inline edit form on detail page with validation
-6. **Delete an outdated venue note** (DELETE) – Note management with confirmation dialog
+6. **Delete a venue** (DELETE) – Venue-level confirmation flow with redirect back to the list
 
 All write operations include loading states, success/error feedback, and client-side validation.
 
@@ -35,9 +35,11 @@ All write operations include loading states, success/error feedback, and client-
 - GET `/api/v1/people/coaches`
 - GET `/api/v1/people/coaches/{public_id}`
 - PATCH `/api/v1/people/coaches/{public_id}` – Update coach profile
+- DELETE `/api/v1/people/coaches/{public_id}` – Remove a coach
 - GET `/api/v1/inventory/venues`
 - GET `/api/v1/inventory/venues/{public_id}`
-- DELETE `/api/v1/inventory/venues/{public_id}/notes/{note_id}` – Delete venue note
+- PATCH `/api/v1/inventory/venues/{public_id}` – Update venue details
+- DELETE `/api/v1/inventory/venues/{public_id}` – Remove a venue
 
 ## Optional mutation endpoints
 
@@ -52,7 +54,7 @@ The home flows (book + issue) can POST to configurable endpoints when the backen
 - **GET**: Stories 3 (Browse coaches) and 4 (Browse venues)
 - **POST**: Stories 1 (Book class) and 2 (Report issue)
 - **PATCH**: Story 5 (Update coach profile)
-- **DELETE**: Story 6 (Delete venue note)
+- **DELETE**: Story 6 (Delete venue)
 
 ## Run
 
@@ -111,8 +113,10 @@ The container uses a multi-stage build:
 2. Open one item in each list and confirm detail routes work.
 3. Confirm loading text appears while waiting for API data.
 4. Stop the API and confirm error plus retry behavior.
-5. Open the home page and verify the booking and issue-report modals show loading, validation, and success states.
-6. Run lint and build checks before submission.
+5. Open a coach detail page and verify the edit form matches the backend fields and saves successfully.
+6. Open a venue detail page and verify edit and delete actions work with confirmation and redirect.
+7. Open the home page and verify the booking and issue-report modals show loading, validation, and success states.
+8. Run lint and build checks before submission.
 
 ## Routes
 
@@ -128,7 +132,7 @@ The container uses a multi-stage build:
 - Updated component map: route and component hierarchy documented in `chm.md`.
 - Forms and state management: controlled booking and issue forms.
 - API integration (fetch): list + detail GET endpoints for coaches and venues.
-- API mutations: home write flows attempt POST with fallback behavior.
+- API mutations: home write flows attempt POST with fallback behavior, and detail pages use PATCH/DELETE against the real backend.
 - Asynchronous UI states: loading and error with retry.
 - UI feedback and error handling: loading, success, disabled submit, and validation states.
 - Routing: multiple views with list and detail navigation.
@@ -137,9 +141,9 @@ The container uses a multi-stage build:
 
 ## Scope note
 
-- Stories 3 and 4 are fully API-based in Phase 2.
-- Stories 1 and 2 are kept from Phase 1 flow.
-- Write operations are now represented in Phase 3 with configurable request paths and local fallback support.
+- Stories 1 and 2 remain local-first flows with optional API POSTs.
+- Stories 3 and 4 are read flows backed by the API, with additional mutation actions on the detail pages.
+- Stories 5 and 6 are aligned to the real `sportsclub` backend: coach PATCH and venue PATCH/DELETE.
 
 ## Notes
 

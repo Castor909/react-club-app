@@ -7,18 +7,20 @@ export default function CoachEditForm({
   error = '',
   isSubmitting = false,
 }) {
+  const [firstName, setFirstName] = useState(coach?.first_name || '');
+  const [lastName, setLastName] = useState(coach?.last_name || '');
   const [email, setEmail] = useState(coach?.email || '');
   const [phone, setPhone] = useState(coach?.phone || '');
-  const [speciality, setSpeciality] = useState(coach?.speciality || coach?.specialty || '');
-  const [address, setAddress] = useState(coach?.address?.formatted_address || coach?.address?.name || '');
+  const [dateOfBirth, setDateOfBirth] = useState(coach?.date_of_birth || '');
+  const [addressPublicId, setAddressPublicId] = useState(coach?.address?.public_id || '');
+  const [certification, setCertification] = useState(coach?.certification || '');
   const [localError, setLocalError] = useState('');
 
   const validate = () => {
+    if (!firstName || firstName.trim() === '') return 'First name is required';
+    if (!lastName || lastName.trim() === '') return 'Last name is required';
     if (!email || email.trim() === '') return 'Email is required';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Email format is invalid';
-    if (!phone || phone.trim() === '') return 'Phone is required';
-    if (!speciality || speciality.trim() === '') return 'Speciality is required';
-    if (!address || address.trim() === '') return 'Address is required';
     return '';
   };
 
@@ -28,10 +30,13 @@ export default function CoachEditForm({
     setLocalError(v);
     if (!v) {
       onSubmit({
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
         email: email.trim(),
         phone: phone.trim(),
-        speciality: speciality.trim(),
-        address: address.trim(),
+        date_of_birth: dateOfBirth || null,
+        address_public_id: addressPublicId.trim() || null,
+        certification: certification || null,
       });
     }
   };
@@ -39,6 +44,32 @@ export default function CoachEditForm({
   return (
     <form onSubmit={handleSubmit} className="card">
       <h4>Edit Coach Profile</h4>
+
+      <div style={{ marginBottom: 12 }}>
+        <label>
+          First name
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="form-input full-width"
+            disabled={isSubmitting}
+          />
+        </label>
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <label>
+          Last name
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="form-input full-width"
+            disabled={isSubmitting}
+          />
+        </label>
+      </div>
 
       <div style={{ marginBottom: 12 }}>
         <label>
@@ -68,29 +99,47 @@ export default function CoachEditForm({
 
       <div style={{ marginBottom: 12 }}>
         <label>
-          Speciality
+          Date of birth
           <input
-            type="text"
-            value={speciality}
-            onChange={(e) => setSpeciality(e.target.value)}
+            type="date"
+            value={dateOfBirth}
+            onChange={(e) => setDateOfBirth(e.target.value)}
             className="form-input full-width"
             disabled={isSubmitting}
-            placeholder="e.g., Yoga, Strength Training"
           />
         </label>
       </div>
 
       <div style={{ marginBottom: 12 }}>
         <label>
-          Address
+          Address public ID
           <input
             type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            value={addressPublicId}
+            onChange={(e) => setAddressPublicId(e.target.value)}
             className="form-input full-width"
             disabled={isSubmitting}
-            placeholder="e.g., 123 Main St"
+            placeholder="Optional"
           />
+        </label>
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <label>
+          Certification
+          <select
+            value={certification}
+            onChange={(e) => setCertification(e.target.value)}
+            className="form-input full-width"
+            disabled={isSubmitting}
+          >
+            <option value="">-- none --</option>
+            <option value="tecnico_deportivo_grado_medio">tecnico_deportivo_grado_medio</option>
+            <option value="tecnico_deportivo_grado_superior">tecnico_deportivo_grado_superior</option>
+            <option value="entrenador_nacional">entrenador_nacional</option>
+            <option value="entrenador_club">entrenador_club</option>
+            <option value="nsca_cpt">nsca_cpt</option>
+          </select>
         </label>
       </div>
 
