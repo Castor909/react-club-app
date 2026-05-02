@@ -107,16 +107,68 @@ The container uses a multi-stage build:
 2. An nginx:alpine stage serves the generated static files.
 3. The nginx config falls back to `index.html` so React Router routes keep working.
 
-## Verification
+## Manual Verification
 
-1. Open `/coaches` and `/venues` from the top navigation.
-2. Open one item in each list and confirm detail routes work.
-3. Confirm loading text appears while waiting for API data.
-4. Stop the API and confirm error plus retry behavior.
-5. Open a coach detail page and verify the edit form matches the backend fields and saves successfully.
-6. Open a venue detail page and verify edit and delete actions work with confirmation and redirect.
-7. Open the home page and verify the booking and issue-report modals show loading, validation, and success states.
-8. Run lint and build checks before submission.
+Use this checklist to verify the app manually before submission. Each step should end in a visible success state, a clear error state, or the expected navigation.
+
+### Setup
+
+1. Start the frontend with `npm run dev`.
+2. Make sure the API URL is configured in `.env` or environment variables.
+3. Open the app in the browser and confirm the header navigation is visible.
+
+### Read flows
+
+1. Open `/coaches` and confirm the coach list loads.
+2. Open a coach detail page and confirm the profile data loads.
+3. Open `/venues` and confirm the venue list loads.
+4. Open a venue detail page and confirm the venue data loads.
+5. Stop the backend API and confirm the list/detail pages show a friendly error message plus retry action.
+
+### Story 5: Update a coach profile
+
+1. Open a coach detail page.
+2. Click `Edit Profile`.
+3. Confirm the form fields match the backend coach schema: first name, last name, email, phone, date of birth, address public ID, and certification.
+4. Change one or more fields.
+5. Submit the form.
+6. Confirm the submit button is disabled while saving.
+7. Confirm a success banner appears after the update.
+8. Confirm the detail view shows the updated values.
+
+### Story 6: Delete a venue
+
+1. Open a venue detail page.
+2. Click `Delete Venue`.
+3. Confirm the browser confirmation dialog appears.
+4. Accept the deletion.
+5. Confirm the delete button is disabled while the request is in progress.
+6. Confirm the app redirects back to `/venues` after success.
+7. If the backend rejects the request, confirm a friendly error message is displayed.
+
+### Story 1: Book a class
+
+1. Open the home page.
+2. Start a booking flow from a class card.
+3. Enter a valid DNI.
+4. Confirm the submit button is disabled while the request is processing.
+5. Confirm the success confirmation appears after booking.
+
+### Story 2: Report an issue
+
+1. Open the home page.
+2. Start the issue report flow.
+3. Verify the DNI modal appears before the form.
+4. Fill in the issue form and submit it.
+5. Confirm validation errors appear for missing or invalid fields.
+6. Confirm the submit button is disabled while the request is processing.
+7. Confirm the success confirmation appears after submission.
+
+### Final checks
+
+1. Run `npm run lint` and confirm there are no lint errors.
+2. Run `npm run build` and confirm the production build succeeds.
+3. Optionally run the Docker build in `docker/docker-compose.yml` and confirm the app serves from Nginx.
 
 ## Routes
 
