@@ -45,7 +45,7 @@ export default function CoachEditForm({
     <form onSubmit={handleSubmit} className="card">
       <h4>Edit Coach Profile</h4>
 
-      <div style={{ marginBottom: 12 }}>
+      <div className="form-field">
         <label>
           First name
           <input
@@ -58,7 +58,7 @@ export default function CoachEditForm({
         </label>
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <div className="form-field">
         <label>
           Last name
           <input
@@ -71,7 +71,7 @@ export default function CoachEditForm({
         </label>
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <div className="form-field">
         <label>
           Email
           <input
@@ -84,7 +84,7 @@ export default function CoachEditForm({
         </label>
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <div className="form-field">
         <label>
           Phone
           <input
@@ -97,7 +97,7 @@ export default function CoachEditForm({
         </label>
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <div className="form-field">
         <label>
           Date of birth
           <input
@@ -110,7 +110,7 @@ export default function CoachEditForm({
         </label>
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <div className="form-field">
         <label>
           Address public ID
           <input
@@ -124,7 +124,7 @@ export default function CoachEditForm({
         </label>
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <div className="form-field">
         <label>
           Certification
           <select
@@ -143,11 +143,11 @@ export default function CoachEditForm({
         </label>
       </div>
 
-      <div style={{ minHeight: 18 }}>
+      <div className="form-status">
         {localError || error ? <div className="error">{localError || error}</div> : null}
       </div>
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+      <div className="form-actions">
         <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
           {isSubmitting ? 'Saving...' : 'Save changes'}
         </button>

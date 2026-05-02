@@ -12,6 +12,7 @@ export default function VenueDetailPage() {
   const [editSubmitting, setEditSubmitting] = useState(false);
   const [editError, setEditError] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleDeleteVenue = async () => {
     const confirmed = window.confirm('Delete this venue? This action cannot be undone.');
@@ -19,6 +20,7 @@ export default function VenueDetailPage() {
 
     setDeleting(true);
     setEditError('');
+    setSuccessMessage('');
 
     try {
       await requestApi(`/inventory/venues/${publicId}`, {
@@ -48,11 +50,11 @@ export default function VenueDetailPage() {
         <Link className="btn" to="/venues">
           Back
         </Link>
-        <div style={{ display: 'inline-flex', gap: 8, marginLeft: 8 }}>
-          <button className="btn btn--primary" onClick={() => setIsEditing(true)} disabled={isEditing || deleting}>
+        <div className="page-actions__group">
+          <button className="btn btn--primary btn--compact" onClick={() => setIsEditing(true)} disabled={isEditing || deleting}>
             Edit Venue
           </button>
-          <button className="btn btn--danger" onClick={handleDeleteVenue} disabled={deleting || isEditing}>
+          <button className="btn btn--danger btn--compact" onClick={handleDeleteVenue} disabled={deleting || isEditing}>
             {deleting ? 'Deleting...' : 'Delete Venue'}
           </button>
         </div>
@@ -60,6 +62,7 @@ export default function VenueDetailPage() {
 
       {loading ? <p className="loading">Loading venue details...</p> : null}
       {!loading && error ? <ErrorMessage message={error} onRetry={refetch} /> : null}
+      {!loading && !error && successMessage ? <div className="status-banner status-banner--success">{successMessage}</div> : null}
 
       {!loading && !error ? (
         <>
@@ -69,10 +72,12 @@ export default function VenueDetailPage() {
               onSubmit={async (updates) => {
                 setEditSubmitting(true);
                 setEditError('');
+                setSuccessMessage('');
                 try {
                   await requestApi(`/inventory/venues/${publicId}`, { method: 'PATCH', body: updates });
                   refetch();
                   setIsEditing(false);
+                  setSuccessMessage('Venue updated successfully.');
                 } catch (err) {
                   setEditError(err.message || 'Failed to update venue');
                 } finally {

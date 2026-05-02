@@ -128,6 +128,55 @@ body{
   gap: 8px;
 }
 
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.detail-header__title {
+  margin: 0;
+}
+
+.page-actions__group {
+  display: inline-flex;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.btn--compact {
+  font-size: 14px;
+}
+
+.status-banner {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.status-banner--success {
+  color: var(--color-success);
+  background: rgba(46, 204, 113, 0.08);
+  border-color: rgba(46, 204, 113, 0.18);
+}
+
+.form-field {
+  margin-bottom: 12px;
+}
+
+.form-status {
+  min-height: 18px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
 .raw-debug {
   margin-top: 12px;
   padding-top: 8px;

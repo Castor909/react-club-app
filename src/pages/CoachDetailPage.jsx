@@ -16,11 +16,13 @@ export default function CoachDetailPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editError, setEditError] = useState('');
   const [editSubmitting, setEditSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const displayName = getCoachName(data);
 
   const handleEditSubmit = async (updates) => {
     setEditSubmitting(true);
     setEditError('');
+    setSuccessMessage('');
 
     try {
       const response = await requestApi(`/people/coaches/${publicId}`, {
@@ -31,6 +33,7 @@ export default function CoachDetailPage() {
       if (response) {
         refetch();
         setIsEditing(false);
+        setSuccessMessage('Coach profile updated successfully.');
       }
     } catch (err) {
       setEditError(err.message || 'Failed to update coach profile');
@@ -61,6 +64,7 @@ export default function CoachDetailPage() {
 
       {loading ? <p className="loading">Loading coach details...</p> : null}
       {!loading && error ? <ErrorMessage message={error} onRetry={refetch} /> : null}
+      {!loading && !error && successMessage ? <div className="status-banner status-banner--success">{successMessage}</div> : null}
 
       {!loading && !error ? (
         <>
@@ -74,9 +78,9 @@ export default function CoachDetailPage() {
             />
           ) : (
             <article className="card detail-card">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <h2 style={{ margin: 0 }}>{displayName}</h2>
-                <button className="btn btn--primary" onClick={() => setIsEditing(true)} style={{ fontSize: 14 }}>
+              <div className="detail-header">
+                <h2 className="detail-header__title">{displayName}</h2>
+                <button className="btn btn--primary btn--compact" onClick={() => setIsEditing(true)}>
                   Edit Profile
                 </button>
               </div>

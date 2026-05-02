@@ -34,11 +34,14 @@ export default function VenueEditForm({ venue = {}, onSubmit = () => {}, onCance
     <form onSubmit={handleSubmit} className="card modal-form">
       <h4>Edit Venue</h4>
 
+      <div className="form-field">
       <label>
         Name
         <input className="form-input full-width" value={name} onChange={(e) => setName(e.target.value)} disabled={isSubmitting} />
       </label>
+      </div>
 
+      <div className="form-field">
       <label>
         Address public ID
         <input
@@ -49,12 +52,16 @@ export default function VenueEditForm({ venue = {}, onSubmit = () => {}, onCance
           placeholder="Optional"
         />
       </label>
+      </div>
 
+      <div className="form-field">
       <label>
         Capacity
         <input type="number" className="form-input full-width" value={capacity} onChange={(e) => setCapacity(e.target.value)} disabled={isSubmitting} />
       </label>
+      </div>
 
+      <div className="form-field">
       <label>
         Venue type
         <select className="form-input full-width" value={venueType} onChange={(e) => setVenueType(e.target.value)} disabled={isSubmitting}>
@@ -64,7 +71,9 @@ export default function VenueEditForm({ venue = {}, onSubmit = () => {}, onCance
           <option value="TRACK">TRACK</option>
         </select>
       </label>
+      </div>
 
+      <div className="form-field">
       <label>
         Indoor
         <select className="form-input full-width" value={indoor ? 'yes' : 'no'} onChange={(e) => setIndoor(e.target.value === 'yes')} disabled={isSubmitting}>
@@ -72,10 +81,11 @@ export default function VenueEditForm({ venue = {}, onSubmit = () => {}, onCance
           <option value="yes">Yes</option>
         </select>
       </label>
+      </div>
 
-      <div style={{ minHeight: 18, marginTop: 8 }}>{localError || error ? <div className="error">{localError || error}</div> : null}</div>
+      <div className="form-status">{localError || error ? <div className="error">{localError || error}</div> : null}</div>
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+      <div className="form-actions">
         <button type="submit" className="btn btn--primary" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save changes'}</button>
         <button type="button" className="btn btn--outline" onClick={onCancel} disabled={isSubmitting}>Cancel</button>
       </div>
