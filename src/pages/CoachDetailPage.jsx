@@ -31,6 +31,7 @@ export default function CoachDetailPage() {
       });
 
       if (response) {
+        // Pull fresh data so the detail view reflects the saved coach profile immediately.
         refetch();
         setIsEditing(false);
         setSuccessMessage('Coach profile updated successfully.');

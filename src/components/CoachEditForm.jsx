@@ -29,6 +29,7 @@ export default function CoachEditForm({
     const v = validate();
     setLocalError(v);
     if (!v) {
+      // Convert the form state into the backend PATCH shape expected by sportsclub.
       onSubmit({
         first_name: firstName.trim(),
         last_name: lastName.trim(),

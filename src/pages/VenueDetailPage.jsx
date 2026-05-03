@@ -15,6 +15,7 @@ export default function VenueDetailPage() {
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleDeleteVenue = async () => {
+    // Keep the destructive action behind a native confirmation dialog so accidental deletes are less likely.
     const confirmed = window.confirm('Delete this venue? This action cannot be undone.');
     if (!confirmed) return;
 
@@ -74,6 +75,7 @@ export default function VenueDetailPage() {
                 setEditError('');
                 setSuccessMessage('');
                 try {
+                  // Send the exact payload shape the backend venue PATCH endpoint expects.
                   await requestApi(`/inventory/venues/${publicId}`, { method: 'PATCH', body: updates });
                   refetch();
                   setIsEditing(false);

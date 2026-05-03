@@ -20,6 +20,7 @@ export default function VenueEditForm({ venue = {}, onSubmit = () => {}, onCance
     const v = validate();
     setLocalError(v);
     if (!v) {
+      // Normalize the editable fields before sending them to the backend.
       onSubmit({
         name: name.trim(),
         capacity: Number(capacity),
