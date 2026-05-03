@@ -84,6 +84,24 @@ Start app:
 npm run dev
 ```
 
+## Reviewer Quick Start
+
+Use these exact steps to check the frontend locally:
+
+```bash
+cd /home/castor909/repos/react-application/react-club-app
+npm install
+npm run dev
+```
+
+If you want to verify the Docker extra credit, use these exact commands:
+
+```bash
+cd /home/castor909/repos/react-application/react-club-app
+docker compose -f docker/docker-compose.yml build
+docker compose -f docker/docker-compose.yml up
+```
+
 ## Scripts
 
 - npm run dev
